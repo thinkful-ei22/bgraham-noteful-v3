@@ -7,10 +7,33 @@ const mongoose = require ('monggose');
 
 const app = require ('../server');
 
-const { TEST_MONGO_URI } = require ('../config');
+const { TEST_MONGODB_URI } = require ('../config');
 
 const Note = require('../models/note');
 const seedNotes = require('../db/seed/notes');
 
 const expect = chai.expect;
 chai.use(chaiHttp);
+
+describe('tests for notes Endpoints', () =>{
+
+  before(function () {
+    return mongoose.connect(TEST_MONGODB_URI)
+      .then(() => mongoose.connection.db.dropDatabase());
+  });
+
+  beforeEach(function () {
+    return Note.insertMany(seedNotes);
+  });
+
+  afterEach(function() {
+    return mongoose.connection.db.dropDatabase();
+  });
+  
+  after(function () {
+    return mongoose.disconnect();
+  });
+
+
+  
+});
