@@ -1,2 +1,9 @@
 language: node_js
 node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: BgNNg5WtfOX4Q0r4oWAi2QUy8WpHy4pFx8mgh/pq4iE8s3DZojDnzqrJfQKFkzT61LZspCeMmym9m2zAcSMwrJBHoovL1GzJ57JepnjMtnM0v6L+2EXGOqeiCs8azlhUKXuZm0KcLr3UolN8FKQVNoZsE43h7ARa9Oqkuj4Oya/ctsv0FUFQnPtuTML61rSD2YqiVZLriAggFSjVD89cQnYhfF9eKRkStjcBqJIxu8HLHZSJfWT7ljfzHc/pdKoxbpVvjx7YhGlQtpyVJdjVwixHeS5PTz4Jxk4hjMKdeLvCn51S5HbIZaunr6FfasQnLaK5CYk/U5X6fEzt1DLXNa1rAPafsCZzpX6ihPTIfxln/T5g4WpqojniLlEsvbmgR/1Q+9HWEMOQU+lpgrydHSlnI1gkmIBVIYWI1yJ+7GrhhXoWQcHx+apsSmbN+YkAOIl63r/CSV/GOJAwGagQAhWNdafDoVogWDWf9Y9AEMTX0MEtaOWh8aJNOwLypKhKXguvjnRrJx+ImOSyV9pou/yd/fQEgW2pc3GnUfGAl0cow2RWqcu8spFdsa4qlTK/spSTTKvU6nwEk+DUDDU42/MCG1So3vZQORCM2e0o8hzLmkgsMxnGICM4s2ooWw9FVNpud60cdrGkPDC2d7iVs6HqMnHWFic0NmiSfOVj7Pc=
+  app: bgraham-notefulv3
+  on:
+    repo: thinkful-ei22/bgraham-noteful-v3
