@@ -80,7 +80,8 @@ describe('tests for notes Endpoints', () =>{
     it('should create and return a new item when provided valid data', function (){
       const newItem = {
         'title': 'The best article about cats ever!',
-        'content': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...'
+        'content': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...',
+        'folderId': '111111111111111111111101'
       };
 
       let res;
@@ -115,7 +116,8 @@ describe('tests for notes Endpoints', () =>{
     it('should update an item and return said updated item when provided valid data', function () {
       const updatedItem = {
         'title': 'This is an updated item',
-        'content': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...'
+        'content': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...',
+        'folderId': '111111111111111111111102'
       };
 
       let res, data;
@@ -130,7 +132,7 @@ describe('tests for notes Endpoints', () =>{
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt');
+          expect(res.body).to.have.keys('id', 'title', 'content', 'folderId', 'createdAt', 'updatedAt');
    
           return Note.findById(res.body.id);
         })
