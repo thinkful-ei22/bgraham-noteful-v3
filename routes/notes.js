@@ -51,13 +51,13 @@ router.get('/:id', (req, res, next) => {
 });
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-  const {title, content} = req.body;
+  const {title, content, folderId} = req.body;
   if (!title) {
     const err = new Error('Missing `title` in request body');
     err.status = 400;
     return next(err);
   }
-  const newNote = {title, content};
+  const newNote = {title, content, folderId};
   
 
   Note.create(newNote)
@@ -70,7 +70,7 @@ router.post('/', (req, res, next) => {
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
   const {id} = req.params;
-  const {title, content} = req.body;
+  const {title, content, folderId} = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
@@ -78,7 +78,7 @@ router.put('/:id', (req, res, next) => {
     return next(err);
   }
 
-  const updateNote = {title, content};
+  const updateNote = {title, content, folderId};
 
   Note
     .findByIdAndUpdate(id, updateNote, {new:true, upsert:true})
