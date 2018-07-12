@@ -3,9 +3,12 @@
 const mongoose = require('mongoose');
 
 const { MONGODB_URI } = require('../config');
+
 const Note = require('../models/note');
+const Folder = require('../models/folders');
 
 const seedNotes = require('../db/seed/notes');
+const seedFolders = require('../db/seed/folders');
 
 mongoose.connect(MONGODB_URI)
   .then(() => {
@@ -14,7 +17,11 @@ mongoose.connect(MONGODB_URI)
   })
   .then(() => {
     console.info('Seeding Database');
-    return Note.insertMany(seedNotes);
+    return Promise.all([
+      Note.insertMany(seedNotes),
+      Folder.insertMany(seedFolders),
+      Folder.createIndexes(),
+    ]);
   })
   .then(() => {
     console.info('Disconnecting');
