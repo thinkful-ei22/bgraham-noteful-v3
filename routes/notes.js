@@ -14,7 +14,7 @@ router.get('/', (req, res, next) => {
   let filter = {};
   if (searchTerm) {
     const re = new RegExp(searchTerm, 'i');
-    filter.$or = [{ 'title': re }, { 'content': re }];
+    filter.$or = [{ 'title': re }, { 'content': re }, {'folderId': re}];
   }
 
   Note
@@ -57,6 +57,12 @@ router.post('/', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
+
+  if (!mongoose.Types.ObjectId.isValid(folderId)){
+    const err = new Error('The `ObjectId` is not valid');
+    err.status = 400;
+    return next(err);
+  }
   const newNote = {title, content, folderId};
   
 
@@ -74,6 +80,12 @@ router.put('/:id', (req, res, next) => {
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
+    err.status = 400;
+    return next(err);
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(folderId)){
+    const err = new Error('The `ObjectId` is not valid');
     err.status = 400;
     return next(err);
   }

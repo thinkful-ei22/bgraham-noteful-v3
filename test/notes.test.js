@@ -10,7 +10,10 @@ const app = require ('../server');
 const { TEST_MONGODB_URI } = require ('../config');
 
 const Note = require('../models/note');
+const Folder = require('../models/folders');
+
 const seedNotes = require('../db/seed/notes');
+const seedFolders = require('../db/seed/folders');
 
 const expect = chai.expect;
 chai.use(chaiHttp);
@@ -23,7 +26,7 @@ describe('tests for notes Endpoints', () =>{
   });
 
   beforeEach(function () {
-    return Note.insertMany(seedNotes);
+    return Note.insertMany(seedNotes), Folder.insertMany(seedFolders);
   });
 
   afterEach(function() {
@@ -109,7 +112,6 @@ describe('tests for notes Endpoints', () =>{
 
     });
 
-    describe;
   });
 
   describe('PUT /api/notes/:id', function () {
