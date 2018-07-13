@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 const router = express.Router();
 
-const Folder = require('../models/folders');
+const Folder = require('../models/folder');
 
 router.get('/', (req, res, next) => {
   const {searchTerm} = req.query;
