@@ -1,30 +1,31 @@
 'use strict';
-
 const express = require('express');
 
 const mongoose = require('mongoose');
 
 const router = express.Router();
 
-const Folder = require('../models/folder');
+const Tag = require('../models/tag');
 const Note = require('../models/note');
-
 
 router.get('/', (req, res, next) => {
   const {searchTerm} = req.query;
-  let filter= {};
+  let filter ={};
+
   if (searchTerm){
     const re = new RegExp(searchTerm, 'i');
     filter = {'name': re};
   }
-  Folder
+  Tag
     .find(filter)
     .sort({name: 'asc'})
     .then(results => {
       res.json(results);
     })
     .catch(err => next(err));
+
 });
+
 
 router.get('/:id', (req, res, next) => {
   const {id} = req.params;
@@ -35,7 +36,7 @@ router.get('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Folder
+  Tag
     .findById(id)
     .then(results => {
       if (results) {
@@ -46,27 +47,28 @@ router.get('/:id', (req, res, next) => {
       }
     })
     .catch(err => next(err));
-});
 
+});
 
 router.post('/', (req, res, next) => {
   const {name} = req.body;
-  if (!name) {
+
+  if(!name){
     const err = new Error('Missing `name` in request body');
-    err.status = 400;
+    err.status =400;
     return next(err);
   }
 
-  const newFolder = {name};
+  const newTag = {name};
 
-  Folder.create(newFolder)
-    .then(results => {
-      res.location(`${req.originalUrl}/${results.id}`).status(201).json(results);  
+  Tag.create(newTag)
+    .then (results => {
+      res.location(`${req.originalUrl}/${results.id}`).status(201).json(results);
     })
     .catch(err => {
       if (err.code === 11000) {
-        err = new Error('The folder name already exists');
-        err.status = 400;
+        err = new Error('The tag name already exists');
+        err.satus = 400;
       }
       next(err);
     });
@@ -82,12 +84,12 @@ router.put('/:id', (req, res, next) => {
     return next(err);
   }
 
-  const updateFolder = {name};
+  const updateTag= {name};
 
-  Folder
-    .findByIdAndUpdate(id, updateFolder, {new: true, upsert: true})
+  Tag
+    .findByIdAndUpdate(id, updateTag, {new: true, upsert: true})
     .then(results => {
-      if (results) {
+      if(results){
         res.json(results);
       } else {
         next();
@@ -95,11 +97,12 @@ router.put('/:id', (req, res, next) => {
     })
     .catch(err => {
       if (err.code === 11000) {
-        err = new Error('The folder name already exists');
+        err = new Error('The tag nae already exists');
         err.status = 400;
       }
       next(err);
     });
+
 });
 
 router.delete('/:id', (req, res, next) => {
@@ -110,22 +113,18 @@ router.delete('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-
-  Folder
+  Tag
     .findByIdAndRemove(id)
     .then(() => {
-      return Note.deleteMany({ folderId: id });
- 
+      return Note.updateMany({tags: id}, {$pull: {tags: id}});
     })
     .then(results => {
-      if (results) {
-        res.status(204).end();
-      } else {
-        next();
-      }
+      
+      res.json(results).status(200).end();
     })
-    .catch(err => next(err)); 
-   
-       
+    .catch(err => {
+      next(err);
+    }); 
 });
+
 module.exports = router;
