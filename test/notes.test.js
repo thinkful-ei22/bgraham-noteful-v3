@@ -10,10 +10,12 @@ const app = require ('../server');
 const { TEST_MONGODB_URI } = require ('../config');
 
 const Note = require('../models/note');
-const Folder = require('../models/folders');
+const Folder = require('../models/folder');
+const Tag = require('../models/tag');
 
 const seedNotes = require('../db/seed/notes');
 const seedFolders = require('../db/seed/folders');
+const seedTags = require('../db/seed/tags');
 
 const expect = chai.expect;
 chai.use(chaiHttp);
@@ -68,7 +70,7 @@ describe('tests for notes Endpoints', () =>{
           expect(res).to.be.json;
 
           expect(res.body).to.be.an('object');
-          expect(res.body).to.have.keys('id', 'title', 'content', 'folderId','createdAt', 'updatedAt');
+          expect(res.body).to.have.keys('id', 'title', 'content', 'folderId','tags','createdAt', 'updatedAt');
 
           expect(res.body.id).to.equal(data.id);
           expect(res.body.title).to.equal(data.title);
@@ -84,7 +86,8 @@ describe('tests for notes Endpoints', () =>{
       const newItem = {
         'title': 'The best article about cats ever!',
         'content': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...',
-        'folderId': '111111111111111111111101'
+        'folderId': '111111111111111111111101',
+        'tags': ['222222222222222222222203', '222222222222222222222202']
       };
 
       let res;
@@ -98,7 +101,7 @@ describe('tests for notes Endpoints', () =>{
           expect(res).to.have.header('location');
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.keys('id', 'title', 'content', 'folderId', 'createdAt', 'updatedAt');
+          expect(res.body).to.have.keys('id', 'title', 'content', 'folderId', 'tags', 'createdAt', 'updatedAt');
        
           return Note.findById(res.body.id);
         })
@@ -119,7 +122,9 @@ describe('tests for notes Endpoints', () =>{
       const updatedItem = {
         'title': 'This is an updated item',
         'content': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...',
-        'folderId': '111111111111111111111102'
+        'folderId': '111111111111111111111102',
+        'tags': ['222222222222222222222203', '222222222222222222222202']
+
       };
 
       let res, data;
@@ -134,7 +139,7 @@ describe('tests for notes Endpoints', () =>{
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          expect(res.body).to.have.keys('id', 'title', 'content', 'folderId', 'createdAt', 'updatedAt');
+          expect(res.body).to.have.keys('id', 'title', 'content', 'folderId','tags', 'createdAt', 'updatedAt');
    
           return Note.findById(res.body.id);
         })
